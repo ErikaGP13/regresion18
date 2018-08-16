@@ -1,0 +1,54 @@
+#crea una matriz con la funcion dim() de 5 columnas y 4 rebglones
+#########ejercicio 1
+matriz1<-matrix(11:30,nrow = 4,ncol = 5)
+matriz1
+dim(matriz1)
+rownames(matriz1) <-c("toluca","pachuca","guadalajara","monterrey")
+colnames(matriz1) <-c("escuela1","escuela2","escuela3","escuela4","escuela5")
+matriz1
+matriz1[1,3]
+matriz1[3,5]
+matriz1[2,1]
+
+#ejercicio 2
+matriz2 <-matrix(1:18,ncol = 3,nrow = 6)
+matriz2
+matriz2[3,3]
+
+
+#ejercicio 3
+s<-matrix(1:9,nrow = 3)
+s
+s[,1]*s[,2]
+
+#ejercicio 4
+a<- c("pequeño","largo","enorme")
+b<-a!="largo"
+a[b]
+#ejercicio 5
+facultad <-c("ECONOMIA","INGENIERIA","ARQUITECTURA","DERECHO")
+licenciatura <-c("ACTUARIA","INGENIERIA CIVIL","ARQUITECTURA","DERECHO")
+calificacion<-c("8","8","9","10")
+mode(facultad)
+mode(licenciatura)
+mode(calificacion)
+#renglon facultad
+dataf<-data.frame(facultad,licenciatura,calificacion)
+dataf
+dataf[-3,]
+
+####6
+EDAD<-c("32","35","43","25")
+NOMBRE<-c("carlos","juan","raquel","paty")
+SITU.CONYUGAL<-c("casado","soltero","soltero","union libre")
+SEGURIDAD_SOCIAL<-c("imss","imss","issste","privado")
+OCUPACION <-c("contador","carpintero","profesora","diseñador")
+dataf2 <-data.frame(EDAD,NOMBRE,SITU.CONYUGAL,SEGURIDAD_SOCIAL,OCUPACION)
+dataf2  
+
+dataf2()
+OCUPACION[c(1,4)]
+SEGURIDAD_SOCIAL[c(3,1)]
+SITU.CONYUGAL[c(4,2)]
+x<-sum(dataf2[,1])
+x
