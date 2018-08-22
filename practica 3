@@ -1,0 +1,68 @@
+#1)obtener grafica de dispersion y describirla 
+#2)calcular BO gorrito, y b1 gorrito 
+#3)graficar la recta con la grafica de dispersion 
+x<-c(132,129,120,113.2,105,92,84,83.2,88.4,59,80,81.5,71,69.2)
+y<-c(46,48,51,52.1,54,52,59,58.7,61.6,64,61.4,54.6,58.8,58)
+
+#############################1)obtener grafica de dispersion y describirla 
+library("ggplot2")
+require(ggplot2)
+ggplot(cuadro, aes(x=x,y=y))+geom_point()+ggtitle("Diagrama de Dispersion")+xlab("Variable independiente X")+
+  ylab("Variable dependiente Y")+geom_smooth(method = lm)
+
+cuadro<- data.frame(x,y)
+cuadro
+##en lsa siguiente grafica podemos observar :
+
+##############################2) calcular BO gorrito, y b1 gorrito 
+###calculo de Sxy
+####XYi
+a<-x*y
+a
+a1<-sum(a)
+a1
+####(xi)(yi)
+a2 <-sum(x)
+a3 <-sum(y)
+a2
+a3
+a4 <-(a2*a3)
+a4
+a5<- a4/14
+a5
+#####sustitucion 
+sxy<-a1-a5
+sxy
+#####calculo de Sxx
+###xi2
+x1 <-x^2
+x2 <- sum(x1)
+x2
+###(xi)^2
+x3<-sum(x)
+x4<-(x3)^2
+x4
+###sustitucion completa
+sxx<-x2-(x4/14)
+sxx
+
+B1<-sxy/sxx
+B1
+
+####CALCULO DE B0
+mediay<- mean(y)
+mediay
+mediax <- mean(x)
+mediax
+
+BO<-mediay-(mediax*B1)
+BO
+
+##### ecuacion Y=75.21243-0.2093874x
+
+
+#####################3)graficar la recta con la grafica de dispersion
+x11()
+ggplot(cuadro, aes(x=x,y=y))+geom_point()+ggtitle("Diagrama de Dispersion")+xlab("Variable independiente X")+
+  ylab("Variable dependiente Y")+geom_smooth(method = lm) + geom_line(aes(B1,BO))
+
