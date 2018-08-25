@@ -1,0 +1,55 @@
+x <-c(125.3,98.2,201.4,147.3,145.9,124.7,112.2,120.2,161.2,178.9,159.5,145.8,75.1,151.4,144.2,125,148.8,
+    132.5,159.6,110.7)
+y<-c(77.9,76.8,81.5,79.8,78.2,78.3,77.5,77,80.1,80.2,79.9,79,76.7,78.2,79.5,78.1,81.5,77,79,78.6)
+
+cuadro2<-data.frame(x,y)
+cuadro2
+##############################2) calcular BO gorrito, y b1 gorrito 
+###calculo de Sxy
+####XYi
+a<-x*y
+a
+a1<-sum(a)
+a1
+####(xi)(yi)
+a2 <-sum(x)
+a3 <-sum(y)
+a2
+a3
+a4 <-(a2*a3)
+a4
+a5<- a4/14
+a5
+#####sustitucion 
+sxy<-a1-a5
+sxy
+#####calculo de Sxx
+###xi2
+x1 <-x^2
+x2 <- sum(x1)
+x2
+###(xi)^2
+x3<-sum(x)
+x4<-(x3)^2
+x4
+###sustitucion completa
+sxx<-x2-(x4/14)
+sxx
+
+B1<-sxy/sxx
+B1
+
+####CALCULO DE B0
+mediay<- mean(y)
+mediay
+mediax <- mean(x)
+mediax
+
+BO<-mediay-(mediax*B1)
+BO
+
+### ybarra = BO + B1*xi
+
+ybarra <- BO + B1*x
+####residuos
+ybarra
