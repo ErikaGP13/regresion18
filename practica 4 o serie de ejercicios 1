@@ -1,0 +1,207 @@
+require(ggplot2)
+
+# EJERCICIO 1
+
+x<-c(170,172,173,174,174,175,176,177,180,180,180,180,180,181,181,182,182,182,182,184,184,185,186,188)
+y<-c(.84,1.31,1.42,1.03,1.07,1.08,1.04,1.80,1.45,1.60,1.61,2.13,2.15,.84,1.43,.90,1.81,1.94,2.68,1.49,2.52,3.00,1.87,3.08)
+DATOS01<-data.frame(x,y); DATOS01
+
+    # a) Gráfica de "Tallo y hoja", tanto de la relación de temnoeratura como de la relación de eficiencia
+boxplot(x,main="Temperatura del tanque")
+mean(x)
+sd(x)
+          # En la gráfica para los datos correspondientes a la temperatura del tanque,  no existen outliers o valores atípicos 
+          # Los datos utilizados en la elaboración de este gráfico, son asimétricos
+          # El conjunto de datos arroja que la temperatura media del tanque es de 179.5, esta cantidad se confima en la gráfica
+boxplot(y,main="Relación de eficiencia")
+mean(y)
+sd(y)
+          # Tampoco existen outliers en la gráfica elaborada con los datos de la relación de eficiencia
+          # Los datos tienen menor asimetría que en el caso de los correspondientes a la temperatura del tanque          
+          # La gráfica permite confirmar el valor de la media para los datos de la relación de eficiencia, pues al calcular la media, su valor es de 1.67
+
+    # b) El valor de la relación de eficiencia ¿estará determinado por completo y de forma única por la temperatura del tanque?
+ggplot(DATOS01, aes(x,y))+geom_point()+ggtitle("Gráfica de relación")+xlab("Temperatura del tanque")+ylab("Relación de eficiencia")+geom_smooth(method = lm)
+          # La Relación de eficiencia, no está determinada por la temperatura del tanque, pues los puntos graficados están dispersos
+
+    # c) Gráfica de dispersión de los datos, ¿será que la relación de eficiencia bien podría pronosticarse mediante el valor de la temperatura?
+ggplot(DATOS01, aes(x,y))+geom_point()+ggtitle("Diagrama de Dispersión")+xlab("Temperatura del tanque")+ylab("Relacion de eficiencia")+geom_smooth(method = lm)
+          # Pronosticar la Relación de eficiencia sería complicado por que los valores de la temperaruta del tanque,  no están dentro del punto de aceptación.
+
+
+
+# EJERCICIO 2
+
+EDAD<-c(0,0,2,11,7,16,9,0,12,4)
+LDBASE<-c(1.72,4.38,4.06,1.26,5.31,.57,3.37,3.44,.74,1.24)
+REFORM<-c(1.88,5.93,5.54,2.67,6.53,.74,4.94,4.89,.69,1.42)
+
+DATOS02<-data.frame(LDBASE,EDAD); DATOS02
+ggplot(DATOS02,aes(x=LDBASE,y=EDAD))+geom_point()+ggtitle("Diagrama de Dispersión")+xlab("Linea de base")+ylab("Edad")+geom_smooth(method = lm)
+
+DATOS03<-data.frame(REFORM,EDAD); DATOS03
+ggplot(DATOS03,aes(x=REFORM,y=EDAD))+geom_point()+ggtitle("Diagrama de Dispersión")+xlab("Gasolina Reformulada")+ylab("Edad")+geom_smooth(method = lm)
+          # Los datos permiten analizar que con la nueva fórmula, el grado de variación es menor, es decir, entre mas viejo sea el motro, tendrá menores emisiones pero a menor proporción que con la linea base 
+
+
+
+# EJERCICIO 3
+
+CH<-c(47,62,65,70,70,78,95,100,114,118,124,127,140,140,140,150,152,164,198,221)
+CNM<-c(38,62,53,67,84,79,93,106,117,116,127,114,134,139,142,170,149,154,200,215)
+
+DATOS04 <-data.frame(CH,CNM)
+DATOS04
+ggplot(DATOS04,aes(x=CH,y=CNM))+geom_point()+ggtitle("Diagrama de Dispersión")+xlab("Concentración de Hidrógeno")+ylab("Concentración mediante Nuevo Método de Sensor")
+cor(CH,CNM)
+          # La relación entre los dos tipos de medición de Concentración de Hidrógeno es fuerte, pues la correlación es de 0.9852362, 
+          # El el gráfico, notamos que existe dependencia de ambas variables
+
+
+
+#EJERCICIO 4
+
+TR<-c(5.8,8.8,11.0,13.6,18.5,21.0,23.7,26.0,28.3,31.9,36.5,38.2,40.4)
+CA<-c(7.8,8.2,6.9,5.3,4.7,4.9,4.3,2.7,2.8,1.8,1.9,1.1,.4)
+
+DATOS05<-data.frame(TR,CA); DATOS05
+ggplot(DATOS05,aes(x=TR,y=CA))+geom_point()+ggtitle("Diagrama de Dispersión")+xlab("Transpiración")+ylab("Concentración de Amonio")
+
+          # Con la elaboración del gráfico, las variables tienen una relacion fuerte y negativa a simple vista , condiciones que hacen muy util aplicar el modelo se regresion lineal simple para el tratamiento de los datos.
+
+
+
+# Ejercicio 5
+
+TEMP<-c(59,63,68,72,74,78,83)
+ALAR<-c(118,182,247,208,197,135,132)
+
+DATOS06<-data.frame(TEMP,ALAR); DATOS06
+DP<-ggplot(DATOS06,aes(x=TEMP,y=ALAR))+geom_point()+ggtitle("Diagrama de Dispersion")+xlab("Temperatura")+ylab("Alargamiento")
+DP
+
+    # a) Gráfica de dispersión donde los ejes se cortan el (0,0). Marque "0","20", "40", "60","80","100" en el eje horizontal, y "0","50", "100", "150","200","250" en el eje vertical
+DP+scale_x_continuous(limits=c(0,100),breaks=c(0,20, 40, 60,80,100),label=c("0","20", "40", "60","80","100"))+scale_y_continuous(limits=c(0,250),breaks=c(0,50,100,150,200,250),label=c("0","50", "100", "150","200","250")) 
+
+    # b) Gráfica de dispersión donde los ejes se cortan el (55,100)
+DP+scale_x_continuous(limits=c(55,85),breaks=c(55,65,75,85),label=c("55","65", "75", "85"))+scale_y_continuous(limits=c(100,250),breaks=c(100,150,200,250),label=c("100", "150","200","250")) 
+    # ¿Será preferible esta gráfica a la del inciso a?
+          # Sí por que permite apreciar con mayor claridad el comportamiento de las variables al eleaborar la gráfica con un rango y dominio más cerrado a los valores que toman las variables.
+
+    # c) ¿Qué sugieren las gráficas de los incisos "a" y "b" sobre la naturaleza de la relación entre las dos variables?
+          # Las datos se ajustarian al modelo de una curva.
+
+
+
+# Ejercicio 6
+    # Análisis de la Gráfica de Dispersión
+          # La Gráfica de Dispersión mostrada en el ejercicio, parece mostrar una relacion lineal entre la Frecuencia de resonancia de la raqueta y la Suma de la aceleración pico a pico, esta se comporta negativa.
+          # También podemos identificar fácilmente a dos outliers o valores atípicos que parecen no seguir la tendencia de las 21 raquetas restantes , ya que tienen una frecuencia de resonancia muy alta y esto hace que la relacion no sea perfecta.
+
+
+
+# Ejercicio 7
+    
+    # a) ¿Cuál es el valor esperado de la resistencia después de 28 días cuando la resistencia acelerada=2500?
+M2500<-1800+1.3*(2500); M2500
+
+    # b) ¿En cuánto se debe esperar que cambie la resistencia después de 28 días cuando la resistencia acelerada se incrementa en 1 Ib/pulg^2?
+          # Cambio esperado: La misma pendiente B1=1.3
+
+    # c) "b)" Para un incremento de 100 Ib/pulg^2
+          # Cambio esperado: 100B1=130
+
+    # d) "b)" Para una reducción de 100 Ib/pulg^2
+          # Cambio esperado: -100B1=-130
+
+
+
+# Ejercicio 8
+
+    # a) Probabilidad de que el valor observado de la resistencia después de 28 días, exceda 500 Ib/pulg^2 cuando el valor de la Resistencia acelerada es de 2000
+M2000<-1800+1.3*(2000); M2000
+        # Desv.estandar
+Des<-350
+          # Estandarizar P(Y>5000) --> P(Z>(5000-4400)/350) ---> P(Z>1.71)
+          # Probabilidad de que el valor observado sea mayor que 5000 lb/pul.
+M<-pnorm(1.71,0,1) ## Sea inferior a 5000
+Z<-1-m ## Complemento
+Z
+
+    # b) "a)" con 2500 en lugar de 2000
+pnorm(.14,0,1)
+i<-1-pnorm(.14,0,1); i
+
+    # c)
+        # P(Z>(100-(5500-4400))/494.97)---->(P>.71)
+pnorm(.71,0,1)
+c<-1-pnorm(.71,0,1); c
+
+    # d) 
+          # Conocemos la desviacion estandar de Y2-Y1=494.97
+          # Conocemos Medias de la siguiente manera M=1800-1.3x2-(1800-1.3x1)=1.3(x2-x1)
+
+
+
+# Ejercicio 9
+    # a) ¿Cuál es el cambio esperado de la velocidad de flujo asociado con un incremento de 1 pulg en la caída de presión?
+          # El cambio está dado por B1 (pendiente), que indica el cambio en la velocidad de flujo asociado a incremento en una unidad en la variable caida de presion.
+          # Respuesta: 0.095
+
+
+    # b) ¿Qué cambio de la velocidad de flujo puede ser esperado cuando la caída de presión se reduce el 5 pulg?
+          # 5*B1=.475
+
+    # c) ¿Cuál es la velocidad de flujo esperada con un caída de presión de 10 pulg?/ 15 pulg
+MY10<--.12+.095*(10); MY10
+MY15<--.12+.095*(15); MY15
+
+    # d)
+          # P[Y>.835]=P[Z>(.835-.830)/025]---->P[Z>.20]
+f<-1-pnorm(.20,0,1); f
+f1<-1-pnorm(.40,0,1); f1
+
+    # e)
+MY11<--.12+.095*(11); MY11
+          # V(Y1-Y2)=V(Y1)+V(Y2)=VAR_TOTAL
+          # DESVIACION = RAIZ(VAR_TOTAL)
+          # P(Y1>Y2)=P(Y1-Y2>0)=P(Z>.095/.035355)-->P(Z>2.69)
+f2<-1-pnorm(2.69,0,1); f2
+
+
+
+# Ejercicio 10
+          # Sacamos los valores esperados de x=1000 y x=2000
+M.1000<-4000+10*(1000)
+M.1000
+
+M.2000<-4000+10*(2000)
+M.2000
+
+          # Dos casos con 5500 Y 6500
+          # P[z>5500-M.1000/D.estandar?]=.05 y ""=.10
+          # obteniendo -850/destandar=-1.65 & -17500/destandar=-1.28
+          # Al despejar ese valor que es el de la desviacion estandar 
+          # no es el indicado que cumple la condicion inicial.
+
+
+
+# Ejercicio 11
+   
+    # a)
+          # B1=-.01
+          # B1*1=-.01
+          # B1*10=-.1
+
+    # b)
+mY200<-5.00-.01*(200); mY200
+
+mY250<-5.00-.01*(250); mY250
+
+    # c)
+          # Calcular la probabilidad para una observación
+          # P(2.4<Z<2.6)
+          # P[(2.4-2.5/.075)<Z<(2.6-2.5/.075)]
+          # P[-1.33<Z<1.33]
+
+t<-(pnorm(1.33,0,1)-pnorm(-1.33,0,1)); t
