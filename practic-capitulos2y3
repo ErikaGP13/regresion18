@@ -1,0 +1,284 @@
+  install.packages("ggplot2")
+require ("ggplot2")
+set.seed (1410) 
+dsmall <- diamonds [sample (nrow (diamonds), 100), ]
+
+####2.3 basic use
+x11()
+qplot(carat,price,data=diamonds)
+x11()
+qplot(log(carat),log(price), data=diamonds)
+
+x11()
+qplot(carat,x*y*z,data=diamonds)
+
+####2.4 colour,size,shape and other aesthetic attributes
+x11()
+qplot(carat,price,data=dsmall,colour=color)
+
+x11()
+qplot(carat,price,data=diamonds,shape=cut)
+
+x11()
+qplot(carat,price,data=diamonds, alpha=I(1/10))
+x11()
+qplot(carat,price,data=diamonds, alpha=I(1/100))
+x11()
+qplot(carat,price,data=diamonds,alpha=I(1/200))
+
+
+######### 2.5 plot geoms
+######2.5.1 adding a smoother to a plot
+x11()
+qplot(carat,price,data=dsmall,geom = c("point","smooth"))
+
+x11()
+qplot(carat,price,data=diamonds,geom = c("point","smooth"))
+
+x11()
+qplot(carat,price,data=dsmall, geom=c("point","smooth"),span=0.2)
+
+x11()
+qplot(carat,price,data=dsmall, geom=c("point","smooth"),span=1)
+
+library(mgcv)
+x11()
+qplot(carat,price,data=dsmall, geom=c("point","smooth"),  
+      method = "gam", formula=y~s(x))
+x11()
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
+      method = "gam", formula = y ~ s(x, bs = "cs"))
+
+library(splines)
+x11()
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
+      method = "lm")
+x11()
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"),
+      method = "lm", formula = y ~ ns(x,5))
+####2.5.2 boxplot and jittered points
+x11()
+qplot(color, price / carat, data = diamonds, geom = "jitter",
+      alpha = I(1 / 5))
+x11()
+qplot(color, price / carat, data = diamonds, geom = "jitter",
+      alpha = I(1 / 50))
+x11()
+qplot(color, price / carat, data = diamonds, geom = "jitter",
+      alpha = I(1 / 200))
+
+###########2.5.3 histogram and density pots
+x11()
+qplot(carat, data = diamonds, geom = "histogram")
+x11()
+qplot(carat, data = diamonds, geom = "density")
+
+x11()
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 1,
+      xlim = c(0,3))
+
+x11()      
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 0.1,
+      xlim = c(0,3))
+x11()      
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 0.01,
+      xlim = c(0,3))
+x11()
+qplot(carat, data = diamonds, geom = "density", colour = color)
+x11()
+qplot(carat, data = diamonds, geom = "histogram", fill = color)
+
+#######2.5.4 Bar charts 
+x11()
+qplot(color, data = diamonds, geom = "bar")
+x11()
+qplot(color, data = diamonds, geom = "bar", weight = carat) + 
+  scale_y_continuous("carat")
+
+########2.5.5 time series with line and path plots
+x11()
+qplot(date, unemploy / pop, data = economics, geom = "line")
+x11()
+qplot(date, uempmed, data = economics, geom = "line")
+
+
+year <- function(x) as.POSIXlt(x)$year + 1900
+x11()
+qplot(unemploy / pop, uempmed, data = economics,   
+      geom = c("point", "path"))
+
+x11()
+qplot(unemploy / pop, uempmed, data = economics,  
+      geom = "path", colour = year(date)) + scale_area()
+
+#########2.6 faceting
+x11()     
+qplot(carat, data = diamonds, facets = color ~ .,
+      geom = "histogram", binwidth = 0.1, xlim = c(0, 3))
+x11()
+qplot(carat, ..density.., data = diamonds, facets = color ~ .,
+      geom = "histogram", binwidth = 0.1, xlim = c(0, 3))
+
+##########2.7 other options
+qplot(
+  + carat, price, data = dsmall,
+  + xlab = "Price ($)", ylab = "Weight (carats)",
+  + main = "Price-weight relationship")
+qplot(
+  + carat, price/carat, data = dsmall,
+  + ylab = expression(frac(price,carat)),
+  + xlab = "Weight (carats)",
+  + main="Small diamonds",
+  + xlim = c(.2,1))
+qplot(carat, price, data = dsmall, log = "xy")
+ 
+   # 3. PLOTTING
+#Para ver algunas de las posibilidades que R ofrece
+demo(graphics)
+                        # 3.1 PLOT Y FUNCIONES RELACIONADAS
+# y contra x
+plot(y ~ x)   # Use una fórmula para especificar el gráfico
+plot(x, y)    # "x" y "y" deben ser del mismo largo
+
+plot((0:20)*pi/10, sin((0:20)*pi/10))
+plot((1:30)*0.92, sin((1:30)*0.92))
+# Con el primer plot de este ejemplo, la gráfica muestra de manera muy clara la función seno, con un dominio de (0,6) y rango de (-1,1)
+# El segundo plot, muestra una gráfica en la que la longitud de onda es menor y la amplitud es mayor, con un dominio de (0,25) y rango de (-1,1)
+# En este segundo plot, no resulta tan obvio que la gráfica está mostrando una función seno
+                              # 3.1.1 Trazar métodos para otras clases de objetos
+
+                        # 3.2 Control fino - Configuración de parámetros
+                            # 3.2.1 Múltiples plot en una página
+
+                      # 3.3 Agregar puntos, líneas y texto
+Bodywt<-c(10,207,62,6.8,52.2);Bodywt
+Brainwt<-c(115,406,1320,179,440);Brainwt
+primates<-data.frame(Bodywt,Brainwt);primates
+row.names(primates)<-c("Potar Monkey","Gorilla","Human","Rhesus monkey","Chimp");primates
+plot(Bodywt, Brainwt)
+text(x=Bodywt, y=Brainwt, labels=row.names(primates), pos=4) # pos=4 posiciones de texto a la derecha del punto
+# Código para mejorar el gráfico
+plot(x=Bodywt, y=Brainwt, pch=16, xlab="Peso corporal (kg)", ylab="Peso cerebral (g)",xlim=c(0,280), ylim=c(0,1350))
+# Especificamos xlim para que haya espacio para las etiquetas
+text(x=Bodywt, y=Brainwt, labels=row.names(primates), pos=4)
+# Para colocar el texto a la izquierda de los puntos
+text(x=Bodywt, y=Brainwt, labels=row.names(primates), pos=2)
+                              # 3.3.1 Tamaño, color y elección del símbolo de trazado
+# Para plot () y points () el parámetro cex ("character expansion") controla el tamaño, mientras que col ("color") controla el color del símbolo de trazado. El parámetro pch controla la elección del símbolo de trazado. Los parámetros cex y col se pueden usar de forma similar con text ()
+plot(1, 1, xlim=c(1, 7.5), ylim=c(1.75,5), type="n", axes=F, xlab="", ylab="") # No trazar puntos
+box()
+points(1:7, rep(4.5, 7), cex=1:7, col=1:7, pch=0:6)
+text(1:7,rep(3.5, 7), labels=paste(0:6), cex=1:7, col=1:7)
+# Lo siguiente, agregado a la trama que resulta de las tres declaraciones anteriores, demuestra otras opciones de pch
+points(1:7,rep(2.5,7), pch=(0:6)+7) # Trazar símbolos del 7 al 13
+text((1:7), rep(2.5,7), paste((0:6)+7), pos=4) # Etiqueta con número de símbolo
+points(1:7,rep(2,7), pch=(0:6)+14) # Trazar los símbolos 14 a 20
+text((1:7), rep(2,7), paste((0:6)+14), pos=4) # Etiquetas con número de símbolo
+# Tenga en cuenta el uso de pos = 4 para colocar el texto a la derecha del punto (1 = abajo, 2 = izquierda, 3 = arriba, 4 = derecha)
+# Una variedad de paletas de colores están disponibles. Aquí hay una función que muestra algunas de las posibilidades
+view.colours <- function(){
+  plot(1, 1, xlim=c(0,14), ylim=c(0,3), type="n", axes=F,
+       xlab="",ylab="")
+  text(1:6, rep(2.5,6), paste(1:6), col=palette()[1:6], cex=2.5)
+  text(10, 2.5, "Default palette", adj=0)
+  rainchars <- c("R","O","Y","G","B","I","V")
+  text(1:7, rep(1.5,7), rainchars, col=rainbow(7), cex=2.5)
+  text(10, 1.5, "rainbow(7)", adj=0)
+  cmtxt <- substring("cm.colors", 1:9,1:9)
+  # Dividir "cm.colors" en sus 9 caracteres
+  text(1:9, rep(0.5,9), cmtxt, col=cm.colors(9), cex=3)
+  text(10, 0.5, "cm.colors(9)", adj=0)
+}
+# Para ejecutar la función, ingrese
+view.colours()
+
+                        # 3.4 Identificación y ubicación en la región de la figura
+                              # 3.4.1 Identificar ()
+                              # 3.4.2 Localizador ()
+
+                        # 3.5 Plots que muestran la distribución de los valores de los datos
+                              # 3.5.1 Histogramas y diagramas de densidad
+                              # 3.5.3 Diagramas de caja
+                              # 3.5.4 Plots de probabilidad normal
+
+                        # 3.6 Otras funciones útiles de trazado
+                              # 3.6.1 Suavizado del diagrama de dispersión
+                              # 3.6.2 Agregar líneas a plots
+                              # 3.6.3 Arpilleras
+                              # 3.6.4 Diagramas de dispersión Matrices
+                              # 3.6.5 Gráficos de puntos
+
+                        # 3.7 Trazado de símbolos matemáticos
+
+                        # 3.8 Pautas para Gráficos
+  
+                        # 3.9 EJERCICIOS
+
+# 1 Lago Huron
+install.packages("MASS")
+library("MASS")
+show(LakeHuron)
+help("LakeHuron")
+    # a)
+plot(LakeHuron)
+mtext("Altura del Lago Hurón")
+plot(mean(LakeHuron))
+mtext("Altura promedio del Lago Hurón")
+    # b)
+plot(LakeHuron,type="p")
+mtext("Lakehuron",side=3,line = 0)
+identify(LakeHuron)
+    # c)
+lag.plot(LakeHuron)
+
+# 2 Peso cerebral contra Peso corporal
+show(Animals)
+plot(Animals,xlab="Peso Corporal",ylab="Peso Cerebral")
+plot(log(Animals),xlab="log peso del cuerpo",ylab="log peso del cerebro",pch=10)
+identify(log(Animals))
+    #Los animales con el cerebro más grande son el 15,7,14
+
+# 4 rnorm
+x<-rnorm(10); x
+help(rnorm)
+y<-rnorm(10,mean=170,sd=4); y
+
+# 5 mfrow
+a11<-rnorm(10)
+a12<-rnorm(10)
+a13<-rnorm(10)
+a14<-rnorm(10)
+
+a21<-sample(1:1000,100)
+a22<-sample(1:1000,100)
+a23<-sample(1:1000,100)
+a24<-sample(1:1000,100)
+
+a31<-sample(1:1000,1000,replace = T)
+a32<-sample(1:1000,1000,replace = T)
+a33<-sample(1:1000,1000,replace = T)
+a34<-sample(1:1000,1000,replace = T)
+
+par(mfrow=c(3,4))
+
+#En la primer fila se observan menos datos que se aprecian mejor y estos siguen un patrón
+
+# 6
+x1<-runif(10); x1
+
+a111<-runif(10)
+a121<-runif(10)
+a131<-runif(10)
+a141<-runif(10)
+
+a211<-sample(1:1000,100)
+a221<-sample(1:1000,100)
+a231<-sample(1:1000,100)
+a241<-sample(1:1000,100)
+
+a311<-sample(1:1000,1000,replace = T)
+a321<-sample(1:1000,1000,replace = T)
+a331<-sample(1:1000,1000,replace = T)
+a341<-sample(1:1000,1000,replace = T)
+
+par(mfrow=c(3,4))
