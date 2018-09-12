@@ -1,0 +1,61 @@
+x<-c(42.2,42.6,43.3,43.5,43.7,44.1,44.9,45.3,45.7,45.7,
+     45.9,46,46.2,46.2,46.8,46.8,47.1,47.2)
+y<-c(44,44,44,45,45,46,46,46,47,48,48,48,47,48,48,49,49,49)
+s<-data.frame(y,x)
+mod1<- lm(y~x)
+#es el resumen del modelo 
+#el intercep es bo y x es b1 
+summary(mod1)
+show(mod1)
+#me da bo y b1 
+names(mod1)
+
+mod1$coefficients
+anova(mod1)
+### como pueden ver sbgorro1 =0.07806(std.error)
+#p-value es 2.43-10
+##en este caso el parametro de interes es b1, el cambio esperado en y 
+#con un incremento en una unidad en x, la hipo nula HO: b=O es rechazada
+#y se acepta la alternativa de Ha:B!!=0, debido a que p-value es un valor
+#menor a 0.05 y se observa en el sumary p-value 
+
+x1<-c(635,644,711,708,836,820,810,870,856,923,878,937,948)
+y1<-c(100,93,88,84,77,75,74,63,57,55,47,43,38)
+mod3<- lm(y1~x1)
+mod3
+summary(mod3)
+##el coeficiente es de .88(adjusted R-squared)
+#la desviacion estadar de sbgorro1=0.018
+#esto es para cualcular el estadistico t(alfha/2,n-2)
+t<-qt(0.025,11)
+sb1<-0.01837
+sb1
+b1<--0.17563
+intervalo<-b1-(t*sb1)
+intervalo2<-b1+(t*sb1)
+intervalo2
+IC<-c(intervalo,intervalo2)
+IC
+
+####ejercicio
+x2<-c(5,12,14,17,23,30,40,47,55,67,72,81,96,112,127)#columen precipitacion 
+y2<-c(4,10,13,15,15,25,27,46,38,46,53,70,82,99,100)#volumen escurrimiento
+ver2<-data.frame(x2,y2)
+ver2
+##
+mod4<-lm(y2~x2)
+mod4
+summary(mod4)
+##podemos observar que si existe una relacion de casi el 97%, 
+t1<-qt(0.025,13)
+sb1.1<-0.03652
+sb1.1
+b1.1<--0.82697
+intervalo<-b1.1-(t1*sb1.1)
+intervalo2<-b1.1+(t1*sb1.1)
+intervalo2
+IC<-c(intervalo,intervalo2)
+IC
+
+#podemos decir que el relacion util entre la precipitacion es de --
+#el cua es rechazado porque no pertenece a el rango que existe dentro del ic
