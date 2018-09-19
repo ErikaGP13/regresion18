@@ -1,0 +1,304 @@
+                    # EJERCICIOS PRIMER PARCIAL #
+
+install.packages("UsingR")
+library(UsingR)
+
+  # Ejercicio 1. Ajustar un modelo de regresión lineal al conjunto de datos father.son 
+  #con el padre (fheight) como el predictor y el hijo (sheight) como el resultado. 
+  #Proporcione un valor de p para el coeficiente de pendiente y realice el prueba de hipotesis.
+    data("father.son")
+    x_padre<-father.son[,"fheight"]
+    y_hijo<-father.son[,"sheight"]
+    
+    mod<-lm(y_hijo ~ x_padre)
+    # Conocer los parametros B0 Y B1
+    mod
+
+  #Ejercicio 2. Con base en la la pregunta 1. Interprete ambos parámetros. 
+    # B^1=0.5141
+    # Por lo tato B^1=0.5141 es el cambio promedio real en la variable y
+    # relacionada con un incremento unitario en la variable indpendiente x.
+    anova(mod)
+    # p-value es 2.2e-16
+    # En este caso el parametro de interes es B1, el cambio esperado en y 
+    # con un incremento en una unidad en x. La hipotesis nula Ho:B1=0 es rechazada 
+    # y se acepta la alternativa Ha:B1!=0 , debido a que el p-value es un valor menor a .05
+
+  #Ejercicio 3. Con base en la pregunta 1. Predecir la altura del hijo si la altura del padre es 
+  #de 80 pulgadas. ¿Podrías recomendar esta predicción? ¿Por qué sí o por qué no? 
+  # Recta cundo altura del padre es 80 pulgadas
+    y_altura<-33.8866+(0.5141*80)
+    y_altura
+  # Cuando x=80 y=75.0146
+    aaa1<-data.frame(x_padre=80)
+    predict(mod,aaa1,interval="prediction",level = 0.95)
+  # Si recomendamos, por que se encuentra dentro del intervalo de predicci??n
+  # con un 95% de confianza cuando x=80.
+
+  #Ejercicio 4. Cargue el conjunto de datos mtcars. Ajuste una regresión lineal con millas 
+  #por galón como resultado y caballos de fuerza como el predictor. Interpreta tus coeficientes.
+    data(mtcars)
+    show(mtcars)
+    y2<-mtcars[,"mpg"]
+    x2<-mtcars[,"hp"]
+
+    mod2<-lm(y2~x2)
+    summary(mod2)
+
+    #El modelo es aceptable, sin embargo no es el mejor debido a que la r cuadrada es mayor a .5 y sin 
+    #embargo no es muy alta, tenemo una b1 de -0.0682 que nos indica una pendiente negativa en la relación 
+    #entre millas por galón y los caballos de fuerza
+
+  #Ejercicio 5. Grafique la recta de ajuste de la preg 4 en un diagrama de dispersión
+    carros<-data.frame(x2,y2)
+    ggplot(carros,aes(x=x2,y=y2))+geom_point()+geom_smooth(method = "lm")+xlab("Caballos de fuerza")+
+      ylab("Millas por galón")+ggtitle("Recta de Ajuste")
+
+  #Ejercicio 6. Con base en la preg 4. Pruebe la hipótesis de que no hay una relación 
+  #lineal entre los caballos de fuerza y millas por galón.
+    anova(mod2)
+    ## p-value es 1.788e-07
+    ## En este caso el parametro de interes es B1, el cambio esperado en y 
+    ## con un incremento en una unidad en x. La hipotesis nula Ho:B1=0 es rechazada 
+    ## y se acepta la alternativa Ha:B1!=0 , debido a que el p-value es un valor menor a .05
+
+  # Ejercicio 7. con base en preg 4. Predecir las millas por galón para una potencia de 111.
+    potencia<-data.frame(x2=111)
+    predict(mod2,potencia,interval="confidence")
+
+    #Podemos asegurar con un 95% de nivel de confianza que las millas por galón recorridas con una 
+    #potencia de 111 caballos de fuerza se encontrará entre 20.94 y 24.10, siendo el valor predicho 
+    #22.52 millas
+
+  # Ejercicio 8. Ajustar un modelo de regresión lineal al conjunto de datos father.son con el 
+  #padre como el predictor y el hijo como el resultado. Grafiqué la altura del hijo (eje horizontal) 
+  #versus los residuales (vertical eje).
+    x_padre<-father.son[,"fheight"]
+    y_hijo_new<-33.8866+(0.5141*(x_padre))
+    base_grafica<-data.frame(x_padre,y_hijo_new)
+    library(ggplot2)
+    grafica<-ggplot(base_grafica, aes(x=x_padre,y=y_hijo_new))+geom_point()+ggtitle("Diagrama de Dispersion")+xlab("Altura Father")+
+      ylab("Altura Son")
+    grafica
+
+  # Ejercicio 9. Con base en la pregunta 8. Estime directamente la varianza residual y compare 
+  #esta estimación con la salida de lm.
+
+  # Ejercicio 10. con base preg 8. Obtenga la R al cuadrado para este modelo y comparela con el summary.
+  # Estimacii??n Varianza residual
+  # Calcular parametro B1
+    Mx_f<-mean(x_padre)
+    My_s<-mean(y_hijo)
+
+  # Calculo de Residuos
+    Y_residuos_new<-(y_hijo-y_hijo_new)
+    Y_res<-data.frame(Y_residuos_new)
+    Residuos_1<-sum(Y_res)
+    Residuos_1
+  # Calculo de varianza residual y r^2
+    SSE_1<-sum(Y_residuos_new*Y_residuos_new)
+    SSE_1
+  #Varianza
+    sigma_al_cuadrado_1<-(SSE_1/1076)
+    sigma_al_cuadrado_1
+    S_1<-sqrt(sigma_al_cuadrado_1)
+    S_1
+  # D.Estandar
+  # Varianza 
+    SST_1<-sum((y_hijo-My_s)*(y_hijo-My_s))
+    SST_1
+    
+    r2_1<-(1-(SSE_1/SST_1))
+    r2_1
+    
+    Sxx_1<-sum((x_padre-Mx_f)*(x_padre-Mx_f))
+    Sxx_1
+
+  # Desviacion estandar estimada.
+    Sb1.1<-S_1/sqrt(Sxx_1)
+    Sb1.1
+  # Comprobacion
+    summary(mod)
+
+    
+#Cargue la base mtcars nuevamente
+
+  # Ejercicio 11.  Ajuste una regresión lineal con millas por galón como resultado y
+  #caballos de fuerza como el predictor. Grafique la potencia frente a los residuos.
+    y2<-mtcars[,"mpg"]
+    x2<-mtcars[,"hp"]
+
+  #Calcular las estimaciones puntuales (B0,B1)
+    mediax2=mean(x2)
+    mediay2=mean(y2)
+
+    numerador<-sum((x2-mean(x2))*(y2-mean(y2)))
+    denominador<-sum((x2-mean(x2))*(x2-mean(x2)))
+    
+    b1=numerador/denominador
+    b1
+    
+    b0=mediay2-(b1*mediax2)
+    b0
+    
+    yy=b0+(b1*x2)
+    yy
+    
+    error<y2-yy
+    errores<-data.frame(x2,yy)
+    ggplot(errores,aes(x=x2,y=yy))+geom_point()+xlab("Caballos de fuerza")+
+      ylab("Errores")+ggtitle("Potencia vs Errores")
+
+  # Ejercicio 12. con base preg 11. Estime directamente la varianza residual y compare esta 
+  #estimación con el salida de lm.
+    mod2
+  ##CALCULAR SSE
+    SSE<- sum((y2-yy)^2)
+    SSE
+
+  ##CALCULAR s^2
+    s2=SSE/30
+    s2  
+
+    summary(mod2)
+    estimacion<-3.863^2
+    estimacion
+   #La varianza de salida del modelo y la calculada directamente es igual a 14.92
+
+  # Ejercicio 13. con base preg 11. obtenga la R al cuadrado para este modelo.
+  #CALCULAR s
+    s=sqrt(s2)
+    s
+
+  #CALCULAR SST
+    SST=sum((y2-mediay2)^2)
+    SST
+
+  #CALCULAR EL COEF DE DETERMINACIÓN r^2
+    r2=1-(SSE/SST)
+    r2
+
+
+    
+    
+    
+    
+
+# Bajar paquetería
+install.packages ("UsingR")
+library(UsingR)
+
+#Cargar base de datps
+attach(father.son)
+show(father.son)
+help(father.son) # fheight(Altura del padre)  sheight(Altura del hijo)
+
+#INTERPRETE EN TODOS LOS CASOS B1
+#INTERVALOS DE CONFIANZA 
+
+#1. Pruebe si el coeficiente de pendiente para los datos de father.son es diferente de cero 
+# (padre como predictor, son como resultado). x=fheight, y=sheight
+x<-(father.son$fheight)
+y<-(father.son$sheight)
+
+Mx<-mean(x);Mx
+My<-mean(y)
+
+num<-sum((x-Mx)*(y-My))
+den<-sum((x-Mx)*(x-Mx))
+
+B1<-num/den; B1
+
+## Podemos decir que el coeficiente de pendiente es diferente de cero, ya que 
+## B1=0.514093
+
+# 2. Con base en la pregunta 1. 
+# Calcule un intervalo de confianza para el coeficiente de la pendiente.
+
+mod19<-lm(y~x); mod19
+summary(mod19)
+t1<-qt(0.025,1076)
+sb1<-0.02705; sb1
+B1
+intervalo1<-B1-(t1*sb1); intervalo1
+intervalo2<-B1+(t1*sb1); intervalo2
+IC<-c(intervalo2,intervalo1); IC
+
+#3. Con base en la pregunta 1.
+# Calcule un intervalo de predicción para la altura del hijo en el promedio del padre altura. 
+# Y grafique la línea de regresión ajustada más los valores superiores e inferiores del intervalo de predicción.
+
+mod19<-lm(y~x); mod19
+Mx<-mean(x);Mx
+aa1<-data.frame(x=Mx)
+predict(mod19,aa1,interval="prediction")
+
+#Gráfica
+regressionLine <- data.frame(x,y)
+names(regressionLine) <- c("sheight", "fheight")
+
+x11()
+ggplot(father.son,  aes(x,y))+  geom_point() + 
+  geom_smooth(data=regressionLine, aes(x=sheight, y=fheight), lwd=1.5, colour="red")+
+  xlab("Height of father") + 
+  ylab("Height of son") + 
+  ggtitle("Father-son Height Data")
+
+#xlab("fheight") + ylab("sheight")+  ggtitle("Father-son Height Data")
+
+
+
+#Cargar la base  mtcars 
+attach(mtcars)
+show(mtcars)
+help(mtcars)
+
+# 4. Con la base mt cars.
+# Ajustar una regresión lineal con millas por galón como resultado y caballos de fuerza como el predictor.
+# Compruebe si el coeficiente de potencia de los caballos de fuerza es o no estadísticamente diferente de cero. 
+# Interpreta tu prueba.
+
+y1<-(mtcars$hp)
+x1<-(mtcars$mpg)
+datos<-data.frame(x1,y1); datos
+
+Mx1<-mean(x1)
+My1<-mean(y1)
+
+num1<-sum((x1-Mx1)*(y1-My1))
+den1<-sum((x1-Mx1)*(x1-Mx1))
+
+b1<-num1/den1; b1
+
+# Interpretacion
+# Podemos decir que el coeficiente de potencia de los cabalos de fuerza es -0.06823, 
+# el cual tiene pendiente negativa
+
+# 5. Con base en la pregunta 4. 
+# Calcule un intervalo de confianza para el coeficiente de la pendiente.
+
+mod20<-lm(y1~x1); mod20
+summary(mod20)
+t1<-qt(0.025,30)
+sb1<-0.01012; sb1
+b1
+intervalo1<-b1-(t1*sb1); intervalo1
+intervalo2<-b1+(t1*sb1); intervalo2
+IC<-c(intervalo2,intervalo1); IC
+
+
+# 6. Con base en la pregunta 4. 
+# Calcule un intervalo de predicción para la MPG esperada cuando el HP promedio.
+
+mod20<-lm(y1~x1); mod20
+Mhp<-mean(hp);Mhp
+aa1<-data.frame(x1=Mhp);aa1
+predict(mod20,aa1,interval="prediction")
+
+
+# 7. Con base en la pregunta 4. 
+# Crear una gráfica tenga la línea de regresión ajustada más 
+# los valores superiores e inferiores del intervalo de predicción.
+x11()
+ggplot(datos, mapping = aes(x1,y1))+ geom_point()+ 
+  geom_smooth(method = "lm", se = T, color="blue")+ theme_bw() + xlab("hp") + ylab("mpg")
